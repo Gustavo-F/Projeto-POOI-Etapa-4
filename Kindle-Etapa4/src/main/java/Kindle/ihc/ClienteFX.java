@@ -36,15 +36,11 @@ public class ClienteFX extends Application{
 	private Usuario usuarioLogado;
 	private Stage stage;
 	private Pane pane;
-	private TextField txtBusca;
 	private static TableView<Livro> tabela;
 	private TableColumn<Livro, Integer> clmID;
 	private TableColumn<Livro, String> clmTitulo;
-	private TableColumn<Livro, String> clmEscritores;
-	private TableColumn<Livro, String> clmGeneros;
 	private TableColumn<Livro, Integer> clmPaginas;
 	private TableColumn<Livro, String> clmEditora;
-	private Button btnBuscar;
 	private Button btnBiblioteca;
 	private Button btnAddLivroBiblioteca;
 	private Button btnSair;
@@ -72,22 +68,12 @@ public class ClienteFX extends Application{
 	private void initComponentes() {
 		pane = new AnchorPane();
 		
-		// busca
-		txtBusca = new TextField();
-		txtBusca.setPromptText("Buscar livro");
-		
-		btnBuscar = new Button("Buscar");
-		
-		pane.getChildren().addAll(txtBusca, btnBuscar);
-		
 		// tabela
 		tabela = new TableView<Livro>();
 		tabela.setItems(geraTabela());
 		
 		clmID = new TableColumn<Livro, Integer>("ID Livro");
 		clmTitulo = new TableColumn<Livro, String>("Título");
-		clmEscritores = new TableColumn<Livro, String>("Escritor(es)");
-		clmGeneros = new TableColumn<Livro, String>("Gênero(s)");
 		clmPaginas = new TableColumn<Livro, Integer>("Páginas");
 		clmEditora = new TableColumn<Livro, String>("Editora");
 		
@@ -105,7 +91,7 @@ public class ClienteFX extends Application{
 			});
 		}
 		
-		tabela.getColumns().addAll(clmID, clmTitulo, clmEscritores, clmGeneros, clmPaginas, clmEditora);
+		tabela.getColumns().addAll(clmID, clmTitulo, clmPaginas, clmEditora);
 		pane.getChildren().add(tabela);
 		
 		// botões
@@ -125,21 +111,10 @@ public class ClienteFX extends Application{
 	private void configLayout() {
 		pane.setPrefSize(800, 600);
 		
-		// busca
-		txtBusca.setLayoutX(20);
-		txtBusca.setLayoutY(20);
-		txtBusca.setPrefHeight(30);
-		txtBusca.setPrefWidth(pane.getPrefWidth() - (pane.getPrefWidth() / 4));
-		
-		btnBuscar.setLayoutX(txtBusca.getPrefWidth() + 40);
-		btnBuscar.setLayoutY(20);
-		btnBuscar.setPrefHeight(30);
-		btnBuscar.setPrefWidth((pane.getPrefWidth() / 4) - 60);
-		
 		// tabela
 		tabela.setLayoutX(20);
-		tabela.setLayoutY(btnBuscar.getLayoutY() + btnBuscar.getPrefHeight() + 20);
-		tabela.setPrefHeight(pane.getPrefHeight() - 130);
+		tabela.setLayoutY(20);
+		tabela.setPrefHeight(pane.getPrefHeight() - 70);
 		tabela.setPrefWidth(pane.getPrefWidth() - 40);
 		
 		// biblioteca
@@ -194,7 +169,7 @@ public class ClienteFX extends Application{
 						return;
 					}
 					
-					Biblioteca biblioteca = new BibliotecaDAO().buscaLivrosBiblioteca(usuarioLogado);
+					Biblioteca biblioteca = new BibliotecaDAO().buscaBiblioteca(usuarioLogado);
 					
 					for(int i = 0; i < biblioteca.getLivros().size(); i++) {
 						if(biblioteca.getLivros().get(i).getTitulo().equals(selectedItem.getTitulo())) {

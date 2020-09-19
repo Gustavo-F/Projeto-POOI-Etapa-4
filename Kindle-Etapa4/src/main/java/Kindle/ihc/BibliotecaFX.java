@@ -36,11 +36,8 @@ public class BibliotecaFX extends Application{
 	private static TableView<Livro> tabela;
 	private TableColumn<Livro, Integer> clmID;
 	private TableColumn<Livro, String> clmTitulo;
-	private TableColumn<Livro, String> clmEscritores;
-	private TableColumn<Livro, String> clmGeneros;
 	private TableColumn<Livro, Integer> clmPaginas;
 	private TableColumn<Livro, String> clmEditora;
-	private Button btnAddLivro;
 	private Button btnRemoverLivro;
 	private Button btnVoltar;
 	
@@ -57,7 +54,7 @@ public class BibliotecaFX extends Application{
 		configLayout();
 		
 		Scene scene = new Scene(pane);
-		btnAddLivro.requestFocus();
+		btnVoltar.requestFocus();
 		
 		stage.setScene(scene);
 		stage.setTitle("Biblioteca de " + usuarioLogado.getNome());
@@ -75,8 +72,6 @@ public class BibliotecaFX extends Application{
 		
 		clmID = new TableColumn<Livro, Integer>("ID Livro");
 		clmTitulo = new TableColumn<Livro, String>("Título");
-		clmEscritores = new TableColumn<Livro, String>("Escritor(es)");
-		clmGeneros = new TableColumn<Livro, String>("Gênero(s)");
 		clmPaginas = new TableColumn<Livro, Integer>("Páginas");
 		clmEditora = new TableColumn<Livro, String>("Editora");
 		
@@ -95,20 +90,17 @@ public class BibliotecaFX extends Application{
 			clmPaginas.setCellValueFactory(new PropertyValueFactory<>("paginas"));
 		}
 		
-		tabela.getColumns().addAll(clmID, clmTitulo, clmEscritores, clmGeneros, clmPaginas, clmEditora);
+		tabela.getColumns().addAll(clmID, clmTitulo, clmPaginas, clmEditora);
 		pane.getChildren().add(tabela);
 		
 		// botões
-		btnAddLivro = new Button("Adicionar Livro");
-		btnAddLivro.setOnAction(adicionarLivro());
-		
 		btnRemoverLivro = new Button("Remover Livro");
 		btnRemoverLivro.setOnAction(removerLivro());
 		
 		btnVoltar = new Button("Voltar");
 		btnVoltar.setOnAction(voltar());
 		
-		pane.getChildren().addAll(btnAddLivro, btnRemoverLivro, btnVoltar);
+		pane.getChildren().addAll(btnRemoverLivro, btnVoltar);
 	}
 	
 	private void configLayout() {
@@ -117,30 +109,24 @@ public class BibliotecaFX extends Application{
 		// Tabela
 		tabela.setLayoutX(20);
 		tabela.setLayoutY(20);
-		tabela.setPrefHeight(pane.getPrefHeight() - 80);
+		tabela.setPrefHeight(pane.getPrefHeight() - 70);
 		tabela.setPrefWidth(pane.getPrefWidth() - 40);
 		
-		// AddLivro
-		btnAddLivro.setLayoutX(20);
-		btnAddLivro.setLayoutY(pane.getPrefHeight() - 40);
-		btnAddLivro.setPrefHeight(30);
-		btnAddLivro.setPrefWidth((pane.getPrefWidth() / 3) - 20);
-		
 		// RemoverLivro
-		btnRemoverLivro.setLayoutX(btnAddLivro.getPrefWidth() + 30);
+		btnRemoverLivro.setLayoutX(20);
 		btnRemoverLivro.setLayoutY(pane.getPrefHeight() - 40);
 		btnRemoverLivro.setPrefHeight(30);
-		btnRemoverLivro.setPrefWidth((pane.getPrefWidth() / 3) - 20);
+		btnRemoverLivro.setPrefWidth((pane.getPrefWidth() / 2) - 30);
 		
 		// Voltar
-		btnVoltar.setLayoutX(btnRemoverLivro.getPrefWidth() + btnAddLivro.getPrefWidth() + 40);
+		btnVoltar.setLayoutX(btnRemoverLivro.getPrefWidth() + 40);
 		btnVoltar.setLayoutY(pane.getPrefHeight() - 40);
 		btnVoltar.setPrefHeight(30);
-		btnVoltar.setPrefWidth((pane.getPrefWidth() / 3) - 20);
+		btnVoltar.setPrefWidth((pane.getPrefWidth() / 2) - 30);
 	}
 
 	private static ObservableList<Livro> geraListaTabela() {
-		return FXCollections.observableArrayList(new BibliotecaDAO().buscaLivrosBiblioteca(usuarioLogado).getLivros());
+		return FXCollections.observableArrayList(new BibliotecaDAO().buscaBiblioteca(usuarioLogado).getLivros());
 	}
 	
 	private static void atualizaTabela() {
@@ -167,6 +153,12 @@ public class BibliotecaFX extends Application{
 				Livro selectedItem = selectionModel.getSelectedItem();
 				
 				try {
+					
+					if(new BibliotecaDAO().buscaBiblioteca(usuarioLogado).getLivros().size() == 0) {
+						AlertaFX.alerta("Sua biblioteca está vazia!");
+						return;
+					}
+					
 					if(selectionModel.isEmpty()) {
 						AlertaFX.alerta("Selecione um livro!");
 						return;

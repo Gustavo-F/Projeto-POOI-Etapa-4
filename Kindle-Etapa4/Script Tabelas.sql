@@ -3,6 +3,7 @@ CREATE TABLE genero(
 	genero_nome VARCHAR(50)NOT NULL PRIMARY KEY
 );
 
+DROP TABLE IF EXISTS pessoa;
 CREATE TABLE pessoa(
 	id_pessoa INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	nome VARCHAR(50) NOT NULL,
@@ -11,6 +12,7 @@ CREATE TABLE pessoa(
 	telefone VARCHAR(15) NOT NULL
 );
 
+DROP TABLE IF EXISTS pessoa_fisica;
 CREATE TABLE pessoa_fisica(
 	id_pessoa INTEGER NOT NULL PRIMARY KEY,
 	cpf VARCHAR(11) NOT NULL UNIQUE,
@@ -18,6 +20,7 @@ CREATE TABLE pessoa_fisica(
 		REFERENCES pessoa (id_pessoa)
 );
 
+DROP TABLE IF EXISTS pessoa_juridica;
 CREATE TABLE pessoa_juridica(
 	id_pessoa INTEGER NOT NULL PRIMARY KEY,
 	cnpj VARCHAR(14) NOT NULL UNIQUE,
@@ -25,6 +28,7 @@ CREATE TABLE pessoa_juridica(
 		REFERENCES pessoa (id_pessoa)
 );
 
+DROP TABLE IF EXISTS editora;
 CREATE TABLE editora(
 	id_pessoa INTEGER NOT NULL,
 	id_editora INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +36,7 @@ CREATE TABLE editora(
 		REFERENCES pessoa_juridica (id_pessoa)
 );
 
+DROP TABLE IF EXISTS escritor;
 CREATE TABLE escritor(
 	id_pessoa INTEGER NOT NULL,
 	id_escritor INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -39,6 +44,7 @@ CREATE TABLE escritor(
 		REFERENCES pessoa_fisica (id_pessoa)
 );
 
+DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario(
 	id_pessoa INTEGER NOT NULL,
 	login VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -48,6 +54,7 @@ CREATE TABLE usuario(
 		REFERENCES pessoa_fisica (id_pessoa)
 );
 
+DROP TABLE IF EXISTS livro;
 CREATE TABLE livro(
 	id_livro INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	titulo VARCHAR(100) NOT NULL UNIQUE,
@@ -57,6 +64,7 @@ CREATE TABLE livro(
 		REFERENCES editora (id_editora)
 );
 
+DROP TABLE IF EXISTS genero_livro;
 CREATE TABLE genero_livro(
 	genero_nome VARCHAR(50) NOT NULL,
 	id_livro INTEGER NOT NULL,
@@ -67,6 +75,7 @@ CREATE TABLE genero_livro(
 		REFERENCES livro (id_livro)
 );
 
+DROP TABLE IF EXISTS escritor_livro;
 CREATE TABLE escritor_livro(
 	id_escritor INTEGER NOT NULL,
 	id_livro INTEGER NOT NULL,
@@ -77,6 +86,7 @@ CREATE TABLE escritor_livro(
 		REFERENCES livro (id_livro)
 );
 
+DROP TABLE IF EXISTS livro_usuario;
 CREATE TABLE livro_usuario(
 	id_livro INTEGER NOT NULL,
 	login VARCHAR(20) NOT NULL,
@@ -85,7 +95,7 @@ CREATE TABLE livro_usuario(
 		REFERENCES livro (id_livro),
 	FOREIGN KEY (login)
 		REFERENCES usuario (login)
-);;
+);
 
 
 

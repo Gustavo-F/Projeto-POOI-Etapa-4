@@ -23,7 +23,7 @@ public class BibliotecaDAO {
 		UtilDB.alterarDB(sql);
 	}
 
-	public Biblioteca buscaLivrosBiblioteca(Usuario usuario) {
+	public Biblioteca buscaBiblioteca(Usuario usuario) {
 		
 		Biblioteca biblioteca = new Biblioteca();
 		PreparedStatement pstm = null;

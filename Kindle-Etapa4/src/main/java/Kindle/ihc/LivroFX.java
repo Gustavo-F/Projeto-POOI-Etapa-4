@@ -10,6 +10,7 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
@@ -25,6 +27,8 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -37,15 +41,11 @@ public class LivroFX extends Application{
 	private Usuario usuarioLogado;
 	private Stage stage;
 	private Pane pane;
-	private TextField txtBusca;
 	private static TableView<Livro> tabela;
 	private TableColumn<Livro, Integer> clmID;
 	private TableColumn<Livro, String> clmTitulo;
 	private TableColumn<Livro, Integer> clmPaginas;
-	private TableColumn<Livro, ArrayList<String>> clmEscritores;
-	private TableColumn<Livro, String> clmGeneros;
 	private TableColumn<Livro, String> clmEditora;
- 	private Button btnBusca;
 	private Button btnCadastrar;
 	private Button btnAtualizar;
 	private Button btnRemover;
@@ -74,12 +74,6 @@ public class LivroFX extends Application{
 	private void initComponentes() {
 		
 		pane = new AnchorPane();
-		
-		// Entradas de texto
-		txtBusca = new TextField();
-		txtBusca.setPromptText("Buscar livro");
-		
-		pane.getChildren().add(txtBusca);
 
 		// tabela
 		tabela = new TableView<Livro>();
@@ -88,10 +82,7 @@ public class LivroFX extends Application{
 		clmID = new TableColumn<Livro, Integer>("ID");
 		clmTitulo = new TableColumn<Livro, String>("Título");
 		clmPaginas = new TableColumn<Livro, Integer>("Páginas");
-		clmEscritores = new TableColumn<Livro, ArrayList<String>>("Escritor(es)");
-		clmGeneros = new TableColumn<Livro, String>("Genero(s)");
 		clmEditora = new TableColumn<Livro, String>("Editora");
-		
 		
 		clmID.setCellValueFactory(new PropertyValueFactory<>("idLivro"));
 		clmTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
@@ -106,11 +97,10 @@ public class LivroFX extends Application{
 		});
 		
 		
-		tabela.getColumns().addAll(clmID,clmTitulo, clmPaginas, clmEscritores, clmGeneros, clmEditora);
+		tabela.getColumns().addAll(clmID,clmTitulo, clmPaginas, clmEditora);
 		pane.getChildren().add(tabela);
 		
 		// botões
-		btnBusca = new Button("Buscar");
 	
 		btnCadastrar = new Button("Cadastrar");
 		btnCadastrar.setOnAction(cadastrar());
@@ -124,28 +114,17 @@ public class LivroFX extends Application{
 		btnVoltar = new Button("Voltar");
 		btnVoltar.setOnAction(voltar());
 		
-		pane.getChildren().addAll(btnBusca, btnCadastrar, btnAtualizar, btnRemover, btnVoltar);
+		pane.getChildren().addAll(btnCadastrar, btnAtualizar, btnRemover, btnVoltar);
 		
 	}
 	
 	private void configLayout() {
 		pane.setPrefSize(800, 600);
 		
-		// Busca
-		txtBusca.setLayoutX(20);
-		txtBusca.setLayoutY(20);
-		txtBusca.setPrefHeight(30);
-		txtBusca.setPrefWidth(pane.getPrefWidth() - 220);
-		
-		btnBusca.setLayoutX(txtBusca.getPrefWidth() + 30);
-		btnBusca.setLayoutY(20);
-		btnBusca.setPrefHeight(30);
-		btnBusca.setPrefWidth((pane.getPrefWidth() / 4) - 30);
-		
 		// tabela
 		tabela.setLayoutX(20);
-		tabela.setLayoutY(txtBusca.getLayoutY() + txtBusca.getPrefHeight() + 20);
-		tabela.setPrefHeight(pane.getPrefHeight() - tabela.getLayoutY() - 60);
+		tabela.setLayoutY(20);
+		tabela.setPrefHeight(pane.getPrefHeight() - 70);
 		tabela.setPrefWidth(pane.getPrefWidth() - 40);
 		
 		// Cadastrar

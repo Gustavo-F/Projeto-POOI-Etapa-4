@@ -256,6 +256,8 @@ public class CadastrarUsuarioFX extends Application{
 					new UsuarioDAO().adiciona(novoUsuario);
 					
 					AlertaFX.info("Usuário Cadastrado com sucesso!");
+					new LoginFX().start(stage);
+					
 				}catch(Exception e) {
 					AlertaFX.erro("Erro ao cadastrar usuário.");
 				}
